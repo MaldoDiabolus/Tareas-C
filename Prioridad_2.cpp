@@ -61,8 +61,20 @@ void inser_proc() {
     cout << "Ingrese la prioridad de este proceso: ";
     cin >> nuevo->prioridad;
 
-    nuevo->sig = pila;
-    pila = nuevo;
+
+    if (pila == NULL || nuevo->prioridad > pila->prioridad) {
+        nuevo->sig = pila;
+        pila = nuevo;
+    } else {
+        nodo* temp = pila;
+
+        while (temp->sig != NULL && nuevo->prioridad <= temp->sig->prioridad) {
+            temp = temp->sig;
+        }
+
+        nuevo->sig = temp->sig;
+        temp->sig = nuevo;
+    }
 
     cout << "\n\nNumero ingresado a la lista.\n\n";
 }
@@ -70,9 +82,29 @@ void inser_proc() {
 void procesar() {
     if (pila != NULL) {
         nodo* temp = pila;
-        pila = pila->sig;
-        cout << "\n\nSe ha atendido el proceso " << temp->proceso << " de prioridad " << temp->prioridad << "\n\n";
-        delete temp;
+        nodo* prioridad_max = pila;
+        
+       
+        while (temp != NULL) {
+            if (temp->prioridad > prioridad_max->prioridad) {
+                prioridad_max = temp;
+            }
+            temp = temp->sig;
+        }
+        
+   
+        temp = pila;
+        if (prioridad_max == pila) {
+            pila = pila->sig;
+        } else {
+            while (temp->sig != prioridad_max) {
+                temp = temp->sig;
+            }
+            temp->sig = prioridad_max->sig;
+        }
+        
+        cout << "\n\nSe ha atendido el proceso " << prioridad_max->proceso << " de prioridad " << prioridad_max->prioridad << "\n\n";
+        delete prioridad_max;
     } else {
         cout << "\n\nNo hay procesos para atender.\n\n";
     }
