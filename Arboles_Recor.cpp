@@ -1,4 +1,5 @@
 #include <iostream>
+#include <queue> 
 
 using namespace std;
 
@@ -100,6 +101,30 @@ public:
         mostrarPostorden(raiz);
     }
 
+    
+    void recorridoPorColumna() {
+        if (raiz == NULL) {
+            cout << "El arbol está vacío.\n";
+            return;
+        }
+
+        queue<nodo*> cola;
+        cola.push(raiz);
+
+        while (!cola.empty()) {
+            int n = cola.size();
+            for (int i = 0; i < n; ++i) {
+                nodo* temp = cola.front();
+                cola.pop();
+                cout << temp->valor << " ";
+                if (temp->izq)
+                    cola.push(temp->izq);
+                if (temp->der)
+                    cola.push(temp->der);
+            }
+            cout << endl;
+        }
+    }
 };
 
 int main() {
@@ -107,14 +132,15 @@ int main() {
     int menu_prin = 0;
     arbol miarbol;
 
-    while (menu_prin != 5) {
+    while (menu_prin != 7) {
         cout << "\n\nIngrese el numero correspondiente a la accion que desea realizar: \n\n";
         cout << "1). Agregar un nuevo numero al arbol.\n"; 
-        cout << "2). Buscar un numero en el árbol.\n";
+        cout << "2). Buscar un numero en el arbol.\n";
         cout << "3). Mostrar los valores ingresados al arbol en preorden.\n";
         cout << "4). Mostrar los valores ingresados al arbol en inorden.\n";
         cout << "5). Mostrar los valores ingresados al arbol en postorden.\n";
-        cout << "6). Salir del programa.\n\n";
+        cout << "6). Mostrar los valores ingresados al arbol por columna.\n";
+        cout << "7). Salir del programa.\n\n";
         
         cin >> menu_prin;
 
@@ -148,8 +174,14 @@ int main() {
                 miarbol.mostrarPostorden();
                 cout << endl;
                 break;
-            
+
             case 6:
+                cout << "\nRecorrido por columna:\n";
+                miarbol.recorridoPorColumna();
+                cout << endl;
+                break;
+            
+            case 7:
                 cout << "\nPrograma terminado.\n\n";
                 break;
             
@@ -159,6 +191,5 @@ int main() {
         }   
     }
 
-    return 0;
-}
-
+    return 0; 
+	}
